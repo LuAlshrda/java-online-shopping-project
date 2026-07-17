@@ -13,7 +13,7 @@ public class ProductFileHandler {
     private String fileName;
 
     public ProductFileHandler() {
-        fileName = "products.txt";
+        fileName = "products.dat";
     }
 
     public ProductFileHandler(String fileName) {

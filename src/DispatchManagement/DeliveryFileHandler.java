@@ -18,7 +18,7 @@ public class DeliveryFileHandler {
     private String fileName;
 
     public DeliveryFileHandler() {
-        fileName = "deliveries.txt";
+        fileName = "deliveries.dat";
     }
 
     public DeliveryFileHandler(String fileName) {
