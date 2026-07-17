@@ -293,7 +293,7 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
         txtRegistrationDate.setText("");
         cmbStatus.setSelectedIndex(0);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    //hi
     private void tblCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseClicked
         // TODO add your handling code here:
         int row = tblCustomers.getSelectedRow();
