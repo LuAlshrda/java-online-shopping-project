@@ -325,6 +325,9 @@ private void loadProducts() {
         jLabel2.setForeground(new java.awt.Color(153, 0, 153));
         jLabel2.setText("Order Details");
 
+        jButton1.setBackground(new java.awt.Color(153, 0, 153));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Exit");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
