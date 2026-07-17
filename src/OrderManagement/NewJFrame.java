@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import CustomerManagement.Customer;
 import CustomerManagement.CustomerManager;
 
-import InventoryManagement.Product;
-import InventoryManagement.ProductManager;
-import InventoryManagement.ProductStatus;
+import ProductManagement.Product;
+import ProductManagement.ProductManager;
+import ProductManagement.ProductStatus;
 /**
  *
  * @author Sham

@@ -7,9 +7,9 @@ package OrderManagement;
 import CustomerManagement.Customer;
 import CustomerManagement.CustomerStatus;
 
-import InventoryManagement.Product;
-import InventoryManagement.ProductManager;
-import InventoryManagement.ProductStatus;
+import ProductManagement.Product;
+import ProductManagement.ProductManager;
+import ProductManagement.ProductStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
