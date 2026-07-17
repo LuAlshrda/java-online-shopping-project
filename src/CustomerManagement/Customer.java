@@ -93,7 +93,7 @@ public class Customer implements Serializable {
     {
         return status;
     }
-    public void setStutus(CustomerStatus status)
+    public void setStatus(CustomerStatus status)
     {
         this.status = status;
     }
