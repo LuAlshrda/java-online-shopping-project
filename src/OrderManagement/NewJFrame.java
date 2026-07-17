@@ -866,4 +866,5 @@ private void clearOrderForm() {
 
     customerComboBox.requestFocus();
 }
+
 }
