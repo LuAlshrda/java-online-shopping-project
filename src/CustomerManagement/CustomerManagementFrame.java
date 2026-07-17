@@ -5,13 +5,39 @@
 package CustomerManagement;
 
 import javax.swing.JOptionPane;
-import javax.xml.validation.Validator;
-
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author msi
  */
 public class CustomerManagementFrame extends javax.swing.JFrame {
+    
+    private CustomerManager manager = new CustomerManager();
+    
+    private void loadCustomerTable() {
+
+    DefaultTableModel model = (DefaultTableModel) tblCustomers.getModel();
+
+    model.setRowCount(0);
+
+    for (Customer customer : manager.getCustomers()) {
+
+        model.addRow(new Object[]{
+
+            customer.getCustomerId(),
+            customer.getCustomerName(),
+            customer.getPhone(),
+            customer.getEmail(),
+            customer.getAddress(),
+            customer.getCity(),
+            customer.getRegistrationDate(),
+            customer.getStatus()
+
+        });
+
+    }
+
+}
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CustomerManagementFrame.class.getName());
 
@@ -19,7 +45,8 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
      * Creates new form CustomerManagementFrame
      */
     public CustomerManagementFrame() {
-        initComponents();
+    initComponents();
+    loadCustomerTable();
     }
 
     /**
@@ -45,13 +72,17 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
         txtAddress = new javax.swing.JTextField();
         txtCity = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        txtRegistrationDate = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         cmbStatus = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCustomers = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -73,7 +104,7 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
 
         jLabel7.setText("Registration Date");
 
-        jTextField7.addActionListener(this::jTextField7ActionPerformed);
+        txtRegistrationDate.addActionListener(this::txtRegistrationDateActionPerformed);
 
         jLabel8.setText("Search:");
 
@@ -91,59 +122,84 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
                 "Customer ID", "Name", "Phone", "Email", "Address", "City", "Date", "Status"
             }
         ));
+        tblCustomers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCustomersMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCustomers);
 
         jButton2.setText("Add");
         jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        jButton3.setText("Update");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
+
+        jButton4.setText("Delete");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
+
+        jButton5.setText("Search");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
+
+        jButton6.setText("Report");
+        jButton6.addActionListener(this::jButton6ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel7)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel1))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtCustomerName)
-                                            .addComponent(txtCustomerId)
-                                            .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(jLabel3)
-                                                    .addComponent(jLabel4))
-                                                .addGap(12, 12, 12)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGap(16, 16, 16)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel6)
-                                            .addComponent(jLabel5))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jButton2)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(21, 21, 21)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel1))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtCustomerName)
+                                        .addComponent(txtCustomerId)
+                                        .addComponent(txtRegistrationDate, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel3)
+                                                .addComponent(jLabel4))
+                                            .addGap(12, 12, 12)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGap(16, 16, 16)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel5))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(157, 157, 157)
+                            .addComponent(jLabel8)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(34, 34, 34)
+                            .addComponent(jButton5)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(jButton2)
+                        .addGap(65, 65, 65)
+                        .addComponent(jButton3)
+                        .addGap(77, 77, 77)
+                        .addComponent(jButton4)
+                        .addGap(64, 64, 64)
+                        .addComponent(jButton6)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -168,17 +224,22 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRegistrationDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
-                .addComponent(jButton2)
-                .addContainerGap(63, Short.MAX_VALUE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5))
+                .addGap(48, 48, 48)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4)
+                    .addComponent(jButton6))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
@@ -188,15 +249,12 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCustomerNameActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtRegistrationDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRegistrationDateActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtRegistrationDateActionPerformed
 
     private void cmbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusActionPerformed
         // TODO add your handling code here:
-        cmbStatus.addItem(CustomerStatus.ACTIVE);
-        cmbStatus.addItem(CustomerStatus.INACTIVE);
-        cmbStatus.addItem(CustomerStatus.BLOCKED);
     }//GEN-LAST:event_cmbStatusActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -209,10 +267,9 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
         String city = txtCity.getText();
         String date = txtRegistrationDate.getText();
 
-        CustomerStatus status =
-        (CustomerStatus)cmbStatus.getSelectedItem();
+        CustomerStatus status = CustomerStatus.valueOf(cmbStatus.getSelectedItem().toString());
         
-        if (!Validator.isEmpty(id)) {
+        if (!VAlidator.isEmpty(id)) {
         } else {
             JOptionPane.showMessageDialog(this,"Enter ID");
             return;
@@ -220,7 +277,107 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
         
         Customer customer =
         new Customer(id,name,phone,email,address,city,date,status);
+        
+        manager.addCustomer(customer);
+        
+        loadCustomerTable();
+
+        JOptionPane.showMessageDialog(this,"Customer added successfully.");
+        
+        txtCustomerId.setText("");
+        txtCustomerName.setText("");
+        txtPhone.setText("");
+        txtEmail.setText("");
+        txtAddress.setText("");
+        txtCity.setText("");
+        txtRegistrationDate.setText("");
+        cmbStatus.setSelectedIndex(0);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tblCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseClicked
+        // TODO add your handling code here:
+        int row = tblCustomers.getSelectedRow();
+
+        txtCustomerId.setText(tblCustomers.getValueAt(row,0).toString());
+        txtCustomerName.setText(tblCustomers.getValueAt(row,1).toString());
+        txtPhone.setText(tblCustomers.getValueAt(row,2).toString());
+        txtEmail.setText(tblCustomers.getValueAt(row,3).toString());
+        txtAddress.setText(tblCustomers.getValueAt(row,4).toString());
+        txtCity.setText(tblCustomers.getValueAt(row,5).toString());
+        txtRegistrationDate.setText(tblCustomers.getValueAt(row,6).toString());
+
+        cmbStatus.setSelectedItem(tblCustomers.getValueAt(row,7).toString());
+    }//GEN-LAST:event_tblCustomersMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String id = txtCustomerId.getText();
+
+    if (manager.deleteCustomer(id)) {
+
+        loadCustomerTable();
+
+        JOptionPane.showMessageDialog(this,
+                "Customer deleted successfully.");
+
+    } else {
+
+        JOptionPane.showMessageDialog(this,
+                "Customer not found.");
+
+        }   
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String keyword = txtSearch.getText();
+
+        DefaultTableModel model = (DefaultTableModel) tblCustomers.getModel();
+
+        model.setRowCount(0);
+
+        for (Customer customer : manager.searchCustomers(keyword)) {
+
+            model.addRow(new Object[]{
+
+                customer.getCustomerId(),
+                customer.getCustomerName(),
+                customer.getPhone(),
+                customer.getEmail(),
+                customer.getAddress(),
+                customer.getCity(),
+                customer.getRegistrationDate(),
+                customer.getStatus()
+
+            });
+
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        String report = "CUSTOMER REPORT\n\n" + "Total Customers : " + manager.getCustomers().size() + "\n\nActive : " + manager.getActiveCustomers() + "\nInactive : " + manager.getInactiveCustomers() + "\nBlocked : " + manager.getBlockedCustomers();
+
+        JOptionPane.showMessageDialog(this, report);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String id = txtCustomerId.getText();
+
+        if (manager.deleteCustomer(id)) {
+
+            loadCustomerTable();
+
+            JOptionPane.showMessageDialog(this,
+                "Customer deleted successfully.");
+
+        } else {
+
+            JOptionPane.showMessageDialog(this,"Customer not found.");
+
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,6 +408,10 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -260,7 +421,6 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JTable tblCustomers;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtCity;
@@ -268,6 +428,7 @@ public class CustomerManagementFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtCustomerName;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtPhone;
+    private javax.swing.JTextField txtRegistrationDate;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
