@@ -11,7 +11,7 @@ package ProductManagement;
 public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductCatalogandInventoryManagement.class.getName());
-
+ 
     /**
      * Creates new form ProductCatalogandInventoryManagement
      */

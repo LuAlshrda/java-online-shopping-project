@@ -10,5 +10,5 @@ package ProductManagement;
  */
 public class MyNewCalssfortesting {
     
-    String name = "Lujain";
+ 
 }
