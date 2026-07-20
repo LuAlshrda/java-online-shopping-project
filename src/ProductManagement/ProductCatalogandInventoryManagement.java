@@ -143,6 +143,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
         jLabel8.setText("Price :");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Out Of Stock", "Discontinued" }));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 0, 255));
@@ -235,6 +236,8 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 0, 255));
         jLabel11.setText("Search :");
+
+        text8.addActionListener(this::text8ActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -363,6 +366,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     String quantityStr = text7.getText();
     
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
+    
 
 
     if (!Product.isNotEmpty(id)) {
@@ -376,7 +380,8 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     int quantity = Integer.parseInt(quantityStr);
     
     Product product =new Product(id,name,category,brand,price,quantity,description,status);
-
+  jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OUT_OF_STOCK", "DISCONTINUED" }));
+    
   manager.addProduct(product);
   loadProductTable();
   JOptionPane.showMessageDialog(this,"Product added successfully.");
@@ -447,8 +452,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     String qtyStr = text7.getText();
 
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
-    
-
+   
     if (!Product.isNotEmpty(id)) {
     } else {
         JOptionPane.showMessageDialog(this,"Enter ID");
@@ -490,9 +494,17 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
             product.getQuantity(),
             product.getProductStatus()
         });
-    
+    }
     }//GEN-LAST:event_jButton5ActionPerformed
-}
+
+    private void text8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_text8ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
     /**
      *
      * @param args
@@ -512,7 +524,6 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     
         java.awt.EventQueue.invokeLater(() -> new ProductCatalogandInventoryManagement().setVisible(true));
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
