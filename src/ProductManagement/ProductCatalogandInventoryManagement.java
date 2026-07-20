@@ -384,6 +384,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     
   manager.addProduct(product);
   loadProductTable();
+  
   JOptionPane.showMessageDialog(this,"Product added successfully.");
 
      
