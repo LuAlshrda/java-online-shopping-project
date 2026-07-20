@@ -7,7 +7,7 @@ public class Validator {
         return text == null || text.trim().isEmpty();
     }
 
-    // Check if price is valid
+    // it the  price is valid
     public static boolean isValidPrice(String price) {
 
         if (isEmpty(price)) {
@@ -22,7 +22,7 @@ public class Validator {
         }
     }
 
-    // Check if quantity is valid
+    //if the  quantity is valid or not 
     public static boolean isValidQuantity(String quantity) {
 
         if (isEmpty(quantity)) {
@@ -37,22 +37,22 @@ public class Validator {
         }
     }
 
-    // Check if Product ID is entered
+   
     public static boolean isValidProductID(String id) {
         return !isEmpty(id);
     }
 
-    // Check if Product Name is entered
+   
     public static boolean isValidProductName(String name) {
         return !isEmpty(name);
     }
 
-    // Check if Category is entered
+ 
     public static boolean isValidCategory(String category) {
         return !isEmpty(category);
     }
 
-    // Check if Brand is entered
+  
     public static boolean isValidBrand(String brand) {
         return !isEmpty(brand);
     }
