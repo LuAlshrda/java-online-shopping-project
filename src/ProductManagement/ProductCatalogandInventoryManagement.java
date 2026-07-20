@@ -367,36 +367,53 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
     
-
-
     if (!Product.isNotEmpty(id)) {
-    }
-    else{
-        JOptionPane.showMessageDialog(this, "Enter ID");
+        JOptionPane.showMessageDialog(this, "Enter Product ID");
         return;
     }
-    
+
+    if (!Product.isNotEmpty(name)) {
+        JOptionPane.showMessageDialog(this, "Enter Product Name");
+        return;
+    }
+
+    if (!Product.isValidPrice(priceStr)) {
+        JOptionPane.showMessageDialog(this, "Invalid Price");
+        return;
+    }
+
+    if (!Product.isValidQuantity(quantityStr)) {
+        JOptionPane.showMessageDialog(this, "Invalid Quantity");
+        return;
+    }
+
     double price = Double.parseDouble(priceStr);
     int quantity = Integer.parseInt(quantityStr);
     
     Product product =new Product(id,name,category,brand,price,quantity,description,status);
-  jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OUT_OF_STOCK", "DISCONTINUED" }));
-    
-  manager.addProduct(product);
-  loadProductTable();
-  
-  JOptionPane.showMessageDialog(this,"Product added successfully.");
+       if (manager.addProduct(product)) {
 
-     
-    text1.setText("");
-    text2.setText("");
-    text3.setText("");
-    text4.setText("");
-    text5.setText("");
-    text6.setText("");
-    text7.setText("");
-    jComboBox1.setSelectedIndex(0);
-      
+        loadProductTable();
+
+        JOptionPane.showMessageDialog(this,
+                "Product added successfully.");
+
+        text1.setText("");
+        text2.setText("");
+        text3.setText("");
+        text4.setText("");
+        text5.setText("");
+        text6.setText("");
+        text7.setText("");
+        jComboBox1.setSelectedIndex(0);
+
+    } else {
+
+        JOptionPane.showMessageDialog(this,
+                "Product ID already exists.");
+
+    }
+ 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void text6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text6ActionPerformed
@@ -454,12 +471,20 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
 
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
    
-    if (!Product.isNotEmpty(id)) {
-    } else {
-        JOptionPane.showMessageDialog(this,"Enter ID");
+     if (!Product.isNotEmpty(id)) {
+        JOptionPane.showMessageDialog(this, "Enter Product ID");
         return;
     }
 
+    if (!Product.isValidPrice(priceStr)) {
+        JOptionPane.showMessageDialog(this, "Invalid Price");
+        return;
+    }
+
+    if (!Product.isValidQuantity(qtyStr)) {
+        JOptionPane.showMessageDialog(this, "Invalid Quantity");
+        return;
+    }
     double price = Double.parseDouble(priceStr);
     int quantity = Integer.parseInt(qtyStr);
 
@@ -482,9 +507,12 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     String keyword = text8.getText();
+
+     System.out.println("Searching for: " + keyword);
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0);
     for (Product product : manager.searchProducts(keyword)) {
+       System.out.println("Found: " + product.getProductId());  
         model.addRow(new Object[]{
             product.getProductId(),
             product.getProductName(),
@@ -495,7 +523,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
             product.getQuantity(),
             product.getProductStatus()
         });
-    }
+     }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void text8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_text8ActionPerformed
@@ -504,6 +532,11 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {
+    "AVAILABLE",
+    "OUT_OF_STOCK",
+    "DISCONTINUED"
+}));
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
