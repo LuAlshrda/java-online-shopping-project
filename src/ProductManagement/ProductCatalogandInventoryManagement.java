@@ -508,11 +508,10 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     String keyword = text8.getText();
 
-     System.out.println("Searching for: " + keyword);
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0);
+    
     for (Product product : manager.searchProducts(keyword)) {
-       System.out.println("Found: " + product.getProductId());  
         model.addRow(new Object[]{
             product.getProductId(),
             product.getProductName(),
