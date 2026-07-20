@@ -276,6 +276,11 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
                 "ID", "Name", "Category", "Brand", "Description", "Price", "Quantity", "Status"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jButton2.setForeground(new java.awt.Color(204, 0, 204));
@@ -373,7 +378,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
     
-    if (!Product.isEmpty(id)) {
+    if (!Validator.isEmpty(id)) {
     } else {
         JOptionPane.showMessageDialog(this, "Enter Product ID");
         return;
@@ -455,7 +460,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
 
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
    
-     if (!Product.isEmpty(id)) {
+     if (!Validator.isEmpty(id)) {
      } else{
         JOptionPane.showMessageDialog(this, "Enter Product ID");
         return;
@@ -515,6 +520,20 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
 
     JOptionPane.showMessageDialog(this, report);
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+    int row = jTable1.getSelectedRow();
+    text1.setText(jTable1.getValueAt(row,0).toString());
+    text2.setText(jTable1.getValueAt(row,1).toString());
+    text3.setText(jTable1.getValueAt(row,2).toString());
+    text4.setText(jTable1.getValueAt(row,3).toString());
+    text5.setText(jTable1.getValueAt(row,4).toString());
+    text6.setText(jTable1.getValueAt(row,5).toString());
+    text7.setText(jTable1.getValueAt(row,6).toString());
+    jComboBox1.setSelectedItem(jTable1.getValueAt(row,7).toString());
+
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      *
