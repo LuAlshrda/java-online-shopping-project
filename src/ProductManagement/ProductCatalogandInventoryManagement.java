@@ -142,7 +142,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 0, 255));
         jLabel8.setText("Price :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Out Of Stock", "Discontinued" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OUT OF STOCK", "DISCONTINUED", " " }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
