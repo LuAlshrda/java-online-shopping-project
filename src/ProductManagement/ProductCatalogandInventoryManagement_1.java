@@ -39,7 +39,7 @@ public class ProductCatalogandInventoryManagement_1 extends javax.swing.JFrame {
     /**
      * Creates new form ProductCatalogandInventoryManagement
      */
-    public ProductCatalogandInventoryManagement() {
+    public ProductCatalogandInventoryManagement_1() {
         initComponents();
         loadProductTable();
     }
