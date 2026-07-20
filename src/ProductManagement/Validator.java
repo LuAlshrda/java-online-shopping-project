@@ -1,10 +1,6 @@
 
 package ProductManagement;
 
-/**
- *
- * @author lujai
- */
 public class Validator {
 
     public static boolean isEmpty(String text) {
