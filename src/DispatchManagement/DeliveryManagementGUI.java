@@ -4,9 +4,7 @@
  */
 package DispatchManagement;
 import javax.swing.JOptionPane;
-import OrderManagement.Order;
-import OrderManagement.OrderManager;
-import OrderManagement.OrderStatus;
+
 
 /**
  *
@@ -17,7 +15,7 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
     
     private DeliveryManager deliveryManager;
     private DeliveryFileHandler deliveryFileHandler;
-    private OrderManager orderManager;
+    private DeliveryPersonManager deliveryPersonManager;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DeliveryManagementGUI.class.getName());
 
     /**
@@ -27,12 +25,16 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         initComponents();
         deliveryManager=new DeliveryManager();
         deliveryFileHandler=new DeliveryFileHandler();
-        orderManager=new OrderManager();
+        deliveryPersonManager=new DeliveryPersonManager();
+        loadDeliveryPersons();
+        txtOrderId.setEditable(false);
+        txtPhone.setEditable(false);
+        txtVehicle.setEditable(false);
         cmbStatus.removeAllItems();
         for (DeliveryStatus status : DeliveryStatus.values()) {
         cmbStatus.addItem(status.toString());
         }
-        loadPendingOrders();
+
     }
 
     
@@ -59,7 +61,6 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtDeliveryId = new javax.swing.JTextField();
         txtOrderId = new javax.swing.JTextField();
-        txtPersonName = new javax.swing.JTextField();
         txtPhone = new javax.swing.JTextField();
         txtVehicle = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -73,42 +74,22 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtRemarks = new javax.swing.JTextArea();
         cmbStatus = new javax.swing.JComboBox<>();
+        cmbDeliveryPerson = new javax.swing.JComboBox<>();
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
-        btnLoad = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tblDeliveries = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         btnSearch = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        cmbSearchType = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel21 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        tblPendingOrders = new javax.swing.JTable();
-        btnSelectOrder = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        lblTotal = new javax.swing.JLabel();
-        lblAssigned = new javax.swing.JLabel();
-        lblDispatched = new javax.swing.JLabel();
-        lblInTransit = new javax.swing.JLabel();
-        lblDelivered = new javax.swing.JLabel();
-        lblFailed = new javax.swing.JLabel();
-        lblReturned = new javax.swing.JLabel();
-        btnReport = new javax.swing.JButton();
+        cmbSearchType = new javax.swing.JComboBox<>();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblDeliveries = new javax.swing.JTable();
+        btnLoad = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,7 +120,6 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 20)); // NOI18N
-        jLabel1.setText("DELIVERY AND DISPATCH MANAGEMENT ");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Delivery Information:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(51, 51, 255))); // NOI18N
 
@@ -178,6 +158,9 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbStatus.addActionListener(this::cmbStatusActionPerformed);
 
+        cmbDeliveryPerson.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbDeliveryPerson.addActionListener(this::cmbDeliveryPersonActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -208,16 +191,17 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtVehicle)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(txtPersonName, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(txtPhone))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtVehicle)))
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbDeliveryPerson, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(40, 40, 40)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
@@ -231,7 +215,7 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(12, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtDeliveryId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,9 +230,9 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtPersonName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(txtActualDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtActualDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbDeliveryPerson, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,17 +255,63 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(this::btnUpdateActionPerformed);
 
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(this::btnDeleteActionPerformed);
-
         btnSave.setText("Save");
         btnSave.addActionListener(this::btnSaveActionPerformed);
 
-        btnLoad.setText("Load");
-        btnLoad.addActionListener(this::btnLoadActionPerformed);
-
         btnClear.setText("Clear");
         btnClear.addActionListener(this::btnClearActionPerformed);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 51, 255))); // NOI18N
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(this::btnSearchActionPerformed);
+
+        jLabel12.setText("Search by:");
+
+        jLabel13.setText("Search text:");
+
+        cmbSearchType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Delivery ID", "Order ID", "Delivery Person", "Delivery Status" }));
+        cmbSearchType.addActionListener(this::cmbSearchTypeActionPerformed);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtSearch))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addComponent(btnSearch))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel12)
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(cmbSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60)
+                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Delivery List:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 51, 255))); // NOI18N
 
@@ -300,229 +330,36 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(tblDeliveries);
 
+        btnLoad.setText("Load");
+        btnLoad.addActionListener(this::btnLoadActionPerformed);
+
+        btnDelete.setText("Delete");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(344, 344, 344)
+                .addComponent(btnLoad)
+                .addGap(84, 84, 84)
+                .addComponent(btnDelete)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(59, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 953, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 51, 255))); // NOI18N
-
-        btnSearch.setText("Search");
-        btnSearch.addActionListener(this::btnSearchActionPerformed);
-
-        jLabel12.setText("Search by:");
-
-        jLabel13.setText("Search text:");
-
-        cmbSearchType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Delivery ID", "Order ID", "Delivery Person", "Delivery Status" }));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel12)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(btnSearch)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(cmbSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
-                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Delivery Assignment Panel", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 51, 255))); // NOI18N
-
-        jLabel21.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel21.setText("Orders Ready for Dispatch");
-
-        tblPendingOrders.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Order ID", "Customer Name", "Delivey Address", "Order Status"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane5.setViewportView(tblPendingOrders);
-
-        btnSelectOrder.setText("Select Order");
-        btnSelectOrder.addActionListener(this::btnSelectOrderActionPerformed);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(381, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(btnSelectOrder)
-                                .addGap(223, 223, 223))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25))))))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel21)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSelectOrder)
-                .addGap(30, 30, 30))
-        );
-
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Delivery Report", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(51, 51, 255))); // NOI18N
-
-        jLabel14.setText("Total Deliveries:");
-
-        jLabel15.setText("Assigned:");
-
-        jLabel16.setText("Dispatched:");
-
-        jLabel17.setText("In Transit:");
-
-        jLabel18.setText("Delivered:");
-
-        jLabel19.setText("Failed:");
-
-        jLabel20.setText("Returned:");
-
-        lblTotal.setText("0");
-
-        lblAssigned.setText("0");
-
-        lblDispatched.setText("0");
-
-        lblInTransit.setText("0");
-
-        lblDelivered.setText("0");
-
-        lblFailed.setText("0");
-
-        lblReturned.setText("0");
-
-        btnReport.setText("Generate Report");
-        btnReport.addActionListener(this::btnReportActionPerformed);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(btnReport))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20))
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblReturned)
-                            .addComponent(lblFailed)
-                            .addComponent(lblDelivered)
-                            .addComponent(lblInTransit)
-                            .addComponent(lblDispatched)
-                            .addComponent(lblAssigned)
-                            .addComponent(lblTotal))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(lblTotal))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(lblAssigned))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(lblDispatched))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(lblInTransit))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(lblDelivered))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(lblFailed))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(lblReturned))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnReport)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLoad)
+                    .addComponent(btnDelete))
+                .addContainerGap(384, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -530,70 +367,53 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnAdd)
-                .addGap(18, 18, 18)
-                .addComponent(btnUpdate)
-                .addGap(18, 18, 18)
-                .addComponent(btnDelete)
-                .addGap(18, 18, 18)
-                .addComponent(btnSave)
-                .addGap(18, 18, 18)
-                .addComponent(btnLoad)
-                .addGap(18, 18, 18)
-                .addComponent(btnClear)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 6, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(20, 20, 20))
+                                .addGap(260, 260, 260)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(103, 103, 103)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(285, 285, 285)
+                                .addComponent(btnAdd)
+                                .addGap(58, 58, 58)
+                                .addComponent(btnUpdate)
+                                .addGap(35, 35, 35)
+                                .addComponent(btnSave)
+                                .addGap(47, 47, 47)
+                                .addComponent(btnClear))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(385, 385, 385)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(240, 240, 240)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(67, 67, 67))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnAdd)
-                                    .addComponent(btnUpdate)
-                                    .addComponent(btnDelete)
-                                    .addComponent(btnSave)
-                                    .addComponent(btnLoad)
-                                    .addComponent(btnClear))
-                                .addGap(52, 52, 52))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnSave)
+                    .addComponent(btnClear))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -616,80 +436,35 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         // TODO add your handling code here
     }//GEN-LAST:event_cmbStatusActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-
-    String searchType = cmbSearchType.getSelectedItem().toString();
-    String searchText = txtSearch.getText().trim();
-
-    javax.swing.table.DefaultTableModel model =
-            (javax.swing.table.DefaultTableModel) tblDeliveries.getModel();
-
-    model.setRowCount(0);
-
-    boolean found = false;
-
-    for (Delivery delivery : deliveryManager.getAllDeliveries()) {
-
-        boolean match = false;
-
-        switch (searchType) {
-
-            case "Delivery ID":
-                match = delivery.getDeliveryId().equalsIgnoreCase(searchText);
-                break;
-
-            case "Order ID":
-                match = delivery.getOrderId().equalsIgnoreCase(searchText);
-                break;
-
-            case "Delivery Person":
-                match = delivery.getDeliveryPersonName().equalsIgnoreCase(searchText);
-                break;
-
-            case "Delivery Status":
-                match = delivery.getDeliveryStatus().toString().equalsIgnoreCase(searchText);
-                break;
-        }
-
-        if (match) {
-
-            found = true;
-
-            model.addRow(new Object[]{
-                delivery.getDeliveryId(),
-                delivery.getOrderId(),
-                delivery.getDeliveryPersonName(),
-                delivery.getDeliveryPersonPhone(),
-                delivery.getVehicleNumber(),
-                delivery.getDispatchDate(),
-                delivery.getExpectedDeliveryDate(),
-                delivery.getActualDeliveryDate(),
-                delivery.getDeliveryStatus(),
-                delivery.getRemarks()
-            });
-        }
-    }
-
-    if (!found) {
-        JOptionPane.showMessageDialog(this, "No matching delivery found.");
-    }
-   
-    }//GEN-LAST:event_btnSearchActionPerformed
-
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        Delivery delivery = new Delivery(
-            txtDeliveryId.getText(),
-            txtOrderId.getText(),
-            txtPersonName.getText(),
-            txtPhone.getText(),
-            txtVehicle.getText(),
-            txtDispatchDate.getText(),
-            txtExpectedDate.getText(),
-            txtActualDate.getText(),
-            DeliveryStatus.valueOf(cmbStatus.getSelectedItem().toString()),
-                txtRemarks.getText());
+        
+String personName = cmbDeliveryPerson.getSelectedItem().toString();
+
+DeliveryPerson selectedPerson =
+        deliveryPersonManager.findByName(personName);
+
+if (selectedPerson == null) {
+    JOptionPane.showMessageDialog(this,
+            "Please select a registered delivery person.");
+    return;
+}
+
+
+Delivery delivery = new Delivery(
+        txtDeliveryId.getText().trim(),
+        txtOrderId.getText().trim(),
+        selectedPerson.getPersonName(),
+        selectedPerson.getPhone(),
+        selectedPerson.getVehicle(),
+        txtDispatchDate.getText().trim(),
+        txtExpectedDate.getText().trim(),
+        txtActualDate.getText().trim(),
+        DeliveryStatus.valueOf(cmbStatus.getSelectedItem().toString()),
+        txtRemarks.getText().trim()
+);
+                    
+                    
             
 
     boolean updated = deliveryManager.updateDelivery(
@@ -742,31 +517,46 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         txtDeliveryId.setText("");
         txtOrderId.setText("");
-        txtPersonName.setText("");
+        if(cmbDeliveryPerson.getItemCount()>0){
+             cmbDeliveryPerson.setSelectedIndex(0);
+                }
+        
         txtPhone.setText("");
         txtVehicle.setText("");
         txtDispatchDate.setText("");
         txtExpectedDate.setText("");
-         txtActualDate.setText("");
-    txtRemarks.setText("");
-
-    cmbStatus.setSelectedIndex(0);
-    tblDeliveries.clearSelection();
+        txtActualDate.setText("");
+        txtRemarks.setText("");
+        
+        if(cmbStatus.getItemCount()>0){
+            cmbStatus.setSelectedIndex(0);
+        }
+        tblDeliveries.clearSelection();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        Delivery delivery = new Delivery(
-            txtDeliveryId.getText(),
-            txtOrderId.getText(),
-            txtPersonName.getText(),
-            txtPhone.getText(),
-            txtVehicle.getText(),
-            txtDispatchDate.getText(),
-            txtExpectedDate.getText(),
-            txtActualDate.getText(),
-            DeliveryStatus.valueOf(cmbStatus.getSelectedItem().toString()),
-                txtRemarks.getText());
+         if(cmbDeliveryPerson.getSelectedItem()==null){
+       javax.swing.JOptionPane.showMessageDialog(this, "Please select a registered delivery person.");
+       return;
+   }
+         String personName=cmbDeliveryPerson.getSelectedItem().toString();
+   DeliveryPerson selectedPerson=deliveryPersonManager.findByName(personName);
+   
+
+   Delivery delivery=new Delivery(
+   txtDeliveryId.getText().trim(),
+   txtOrderId.getText().trim(),
+   selectedPerson.getPersonName().trim(),
+   selectedPerson.getPhone().trim(),        
+   selectedPerson.getVehicle().trim(),
+   txtDispatchDate.getText().trim(),
+   txtExpectedDate.getText().trim(),       
+   txtActualDate.getText().trim(),
+   DeliveryStatus.valueOf(cmbStatus.getSelectedItem().toString()),
+   txtRemarks.getText().trim()
+   );
+        
 
     boolean added = deliveryManager.addDelivery(delivery);
     if (added) {
@@ -802,219 +592,180 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        boolean deleted = deliveryManager.deleteDelivery(
-            txtDeliveryId.getText());
-
-    if (deleted) {
-
-    deliveryFileHandler.saveDeliveries(
-            deliveryManager.getAllDeliveries());
-
-    int row = tblDeliveries.getSelectedRow();
-
-    if (row >= 0) {
-        javax.swing.table.DefaultTableModel model =
-                (javax.swing.table.DefaultTableModel)
-                tblDeliveries.getModel();
-
-        model.removeRow(row);
-    }
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Delivery deleted successfully.");
-
-} else {
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Unable to delete delivery..");
-}
-    
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        // TODO add your handling code here:
-         
-    deliveryManager.setDeliveryList(
-            deliveryFileHandler.loadDeliveries());
-
-    javax.swing.table.DefaultTableModel model =
-            (javax.swing.table.DefaultTableModel)
-            tblDeliveries.getModel();
-
-    model.setRowCount(0);
-
-    for (Delivery delivery :
-            deliveryManager.getAllDeliveries()) {
-
-        model.addRow(new Object[]{
-            delivery.getDeliveryId(),
-            delivery.getOrderId(),
-            delivery.getDeliveryPersonName(),
-            delivery.getDeliveryPersonPhone(),
-            delivery.getVehicleNumber(),
-            delivery.getDispatchDate(),
-            delivery.getExpectedDeliveryDate(),
-            delivery.getActualDeliveryDate(),
-            delivery.getDeliveryStatus(),
-            delivery.getRemarks()
-        });
-    
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Deliveries loaded successfully.");
-}
-
-    }//GEN-LAST:event_btnLoadActionPerformed
-
-    private void tblDeliveriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDeliveriesMouseClicked
-        // TODO add your handling code here:
-
-    int row = tblDeliveries.getSelectedRow();
-
-    if (row >= 0) {
-
-        txtDeliveryId.setText(
-                tblDeliveries.getValueAt(row, 0).toString()
-        );
-
-        txtOrderId.setText(
-                tblDeliveries.getValueAt(row, 1).toString()
-        );
-
-        txtPersonName.setText(
-                tblDeliveries.getValueAt(row, 2).toString()
-        );
-
-        txtPhone.setText(
-                tblDeliveries.getValueAt(row, 3).toString()
-        );
-
-        txtVehicle.setText(
-                tblDeliveries.getValueAt(row, 4).toString()
-        );
-
-        txtDispatchDate.setText(
-                tblDeliveries.getValueAt(row, 5).toString()
-        );
-
-        txtExpectedDate.setText(
-                tblDeliveries.getValueAt(row, 6).toString()
-        );
-
-        txtActualDate.setText(
-                tblDeliveries.getValueAt(row, 7).toString()
-        );
-
-        cmbStatus.setSelectedItem(
-                tblDeliveries.getValueAt(row, 8).toString()
-        );
-
-        txtRemarks.setText(
-                tblDeliveries.getValueAt(row, 9).toString()
-        );
-    }
-
-
-
-    }//GEN-LAST:event_tblDeliveriesMouseClicked
-
     private void txtDispatchDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDispatchDateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDispatchDateActionPerformed
 
-    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        // TODO add your handling code here:
-
-    int total = deliveryManager.getAllDeliveries().size();
-
-    int assigned = 0;
-    int dispatched = 0;
-    int inTransit = 0;
-    int delivered = 0;
-    int failed = 0;
-    int returned = 0;
-
-    for (Delivery delivery : deliveryManager.getAllDeliveries()) {
-
-        if (delivery.getDeliveryStatus() == DeliveryStatus.ASSIGNED) {
-            assigned++;
-
-        } else if (delivery.getDeliveryStatus() == DeliveryStatus.DISPATCHED) {
-            dispatched++;
-
-        } else if (delivery.getDeliveryStatus() == DeliveryStatus.IN_TRANSIT) {
-            inTransit++;
-
-        } else if (delivery.getDeliveryStatus() == DeliveryStatus.DELIVERED) {
-            delivered++;
-
-        } else if (delivery.getDeliveryStatus() == DeliveryStatus.FAILED) {
-            failed++;
-
-        } else if (delivery.getDeliveryStatus() == DeliveryStatus.RETURNED) {
-            returned++;
+     public void setOrderId(String orderId){
+                txtOrderId.setText(orderId);
+        }
+    private void loadDeliveryPersons(){
+        cmbDeliveryPerson.removeAllItems();
+        for(DeliveryPerson person : deliveryPersonManager.getDeliveryPersons()){
+            cmbDeliveryPerson.addItem(person.getPersonName());
         }
     }
 
-    lblTotal.setText(String.valueOf(total));
-    lblAssigned.setText(String.valueOf(assigned));
-    lblDispatched.setText(String.valueOf(dispatched));
-    lblInTransit.setText(String.valueOf(inTransit));
-    lblDelivered.setText(String.valueOf(delivered));
-    lblFailed.setText(String.valueOf(failed));
-    lblReturned.setText(String.valueOf(returned));
-
-    }//GEN-LAST:event_btnReportActionPerformed
-    private void loadPendingOrders() {
-
-    javax.swing.table.DefaultTableModel model =
-
-            (javax.swing.table.DefaultTableModel) tblPendingOrders.getModel();
-
-    model.setRowCount(0);
-
-    for (Order order : orderManager.getOrders()) {
-
-        if (order.getStatus() == OrderStatus.READY_FOR_DISPATCH
-        || order.getStatus() == OrderStatus.PACKED) {
-
-    model.addRow(new Object[]{
-        order.getOrderId(),
-        order.getCustomerName(),
-        order.getDeliveryAddress(),
-        order.getStatus()
-    });
-}
-
+    private void cmbDeliveryPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDeliveryPersonActionPerformed
+        // TODO add your handling code here:
+       
+        if(cmbDeliveryPerson.getSelectedItem()==null){
+            return;}
+         String personName=cmbDeliveryPerson.getSelectedItem().toString();
+        DeliveryPerson person=deliveryPersonManager.findByName(personName);
+        if(person!=null){
+            txtPhone.setText(person.getPhone());
+            txtVehicle.setText(person.getVehicle());
         }
+    }//GEN-LAST:event_cmbDeliveryPersonActionPerformed
 
-
-}
-
-    private void btnSelectOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectOrderActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
 
-    int row = tblPendingOrders.getSelectedRow();
+        String searchType = cmbSearchType.getSelectedItem().toString();
+        String searchText = txtSearch.getText().trim();
 
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this,
-                "Please select an order first.");
-        return;
-    }
+        javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) tblDeliveries.getModel();
 
-    txtOrderId.setText(
-            tblPendingOrders.getValueAt(row, 0).toString()
-    );
+        model.setRowCount(0);
 
-    JOptionPane.showMessageDialog(this,
-            "Order selected successfully.");
+        boolean found = false;
 
-    }//GEN-LAST:event_btnSelectOrderActionPerformed
+        for (Delivery delivery : deliveryManager.getAllDeliveries()) {
+
+            boolean match = false;
+
+            switch (searchType) {
+
+                case "Delivery ID":
+                match = delivery.getDeliveryId().equalsIgnoreCase(searchText);
+                break;
+
+                case "Order ID":
+                match = delivery.getOrderId().equalsIgnoreCase(searchText);
+                break;
+
+                case "Delivery Person":
+                match = delivery.getDeliveryPersonName().equalsIgnoreCase(searchText);
+                break;
+
+                case "Delivery Status":
+                match = delivery.getDeliveryStatus().toString().equalsIgnoreCase(searchText);
+                break;
+            }
+
+            if (match) {
+
+                found = true;
+
+                model.addRow(new Object[]{
+                    delivery.getDeliveryId(),
+                    delivery.getOrderId(),
+                    delivery.getDeliveryPersonName(),
+                    delivery.getDeliveryPersonPhone(),
+                    delivery.getVehicleNumber(),
+                    delivery.getDispatchDate(),
+                    delivery.getExpectedDeliveryDate(),
+                    delivery.getActualDeliveryDate(),
+                    delivery.getDeliveryStatus(),
+                    delivery.getRemarks()
+                });
+            }
+        }
+
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "No matching delivery found.");
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void cmbSearchTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSearchTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSearchTypeActionPerformed
+
+    private void tblDeliveriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDeliveriesMouseClicked
+        // TODO add your handling code here:
+
+        int row = tblDeliveries.getSelectedRow();
+
+        if (row >= 0) {
+
+            txtDeliveryId.setText(
+                tblDeliveries.getValueAt(row, 0).toString()
+            );
+
+            txtOrderId.setText(
+                tblDeliveries.getValueAt(row, 1).toString()
+            );
+
+            cmbDeliveryPerson.setSelectedItem(
+                tblDeliveries.getValueAt(row, 2).toString()
+            );
+
+            txtPhone.setText(
+                tblDeliveries.getValueAt(row, 3).toString()
+            );
+
+            txtVehicle.setText(
+                tblDeliveries.getValueAt(row, 4).toString()
+            );
+
+            txtDispatchDate.setText(
+                tblDeliveries.getValueAt(row, 5).toString()
+            );
+
+            txtExpectedDate.setText(
+                tblDeliveries.getValueAt(row, 6).toString()
+            );
+
+            txtActualDate.setText(
+                tblDeliveries.getValueAt(row, 7).toString()
+            );
+
+            cmbStatus.setSelectedItem(
+                tblDeliveries.getValueAt(row, 8).toString()
+            );
+
+            txtRemarks.setText(
+                tblDeliveries.getValueAt(row, 9).toString()
+            );
+        }
+    }//GEN-LAST:event_tblDeliveriesMouseClicked
+
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+        // TODO add your handling code here:
+
+        deliveryManager.setDeliveryList(
+            deliveryFileHandler.loadDeliveries());
+
+        javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel)
+        tblDeliveries.getModel();
+
+        model.setRowCount(0);
+
+        for (Delivery delivery :
+            deliveryManager.getAllDeliveries()) {
+
+            model.addRow(new Object[]{
+                delivery.getDeliveryId(),
+                delivery.getOrderId(),
+                delivery.getDeliveryPersonName(),
+                delivery.getDeliveryPersonPhone(),
+                delivery.getVehicleNumber(),
+                delivery.getDispatchDate(),
+                delivery.getExpectedDeliveryDate(),
+                delivery.getActualDeliveryDate(),
+                delivery.getDeliveryStatus(),
+                delivery.getRemarks()
+            });
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Deliveries loaded successfully.");
+        }
+       
+    }//GEN-LAST:event_btnLoadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1048,11 +799,10 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnLoad;
-    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnSelectOrder;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cmbDeliveryPerson;
     private javax.swing.JComboBox<String> cmbSearchType;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JLabel jLabel1;
@@ -1060,15 +810,7 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1079,30 +821,18 @@ public class DeliveryManagementGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JLabel lblAssigned;
-    private javax.swing.JLabel lblDelivered;
-    private javax.swing.JLabel lblDispatched;
-    private javax.swing.JLabel lblFailed;
-    private javax.swing.JLabel lblInTransit;
-    private javax.swing.JLabel lblReturned;
-    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblDeliveries;
-    private javax.swing.JTable tblPendingOrders;
     private javax.swing.JTextField txtActualDate;
     private javax.swing.JTextField txtDeliveryId;
     private javax.swing.JTextField txtDispatchDate;
     private javax.swing.JTextField txtExpectedDate;
     private javax.swing.JTextField txtOrderId;
-    private javax.swing.JTextField txtPersonName;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextArea txtRemarks;
     private javax.swing.JTextField txtSearch;
