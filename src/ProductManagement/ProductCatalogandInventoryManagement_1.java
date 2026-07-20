@@ -34,7 +34,7 @@ public class ProductCatalogandInventoryManagement_1 extends javax.swing.JFrame {
 
 }
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductCatalogandInventoryManagement.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductCatalogandInventoryManagement_1.class.getName());
    
     /**
      * Creates new form ProductCatalogandInventoryManagement
@@ -554,7 +554,7 @@ public class ProductCatalogandInventoryManagement_1 extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
     
-        java.awt.EventQueue.invokeLater(() -> new ProductCatalogandInventoryManagement().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ProductCatalogandInventoryManagement_1().setVisible(true));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
