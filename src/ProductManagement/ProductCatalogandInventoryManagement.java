@@ -1,13 +1,14 @@
-package ProductManagement;
+ package ProductManagement;
+ 
  import javax.swing.JOptionPane;
  import javax.swing.table.DefaultTableModel;
 /**
- *
- * @author lujai
+ * 
+ * @author lujain 2241100881
  */
 public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
 
-    private ProductManager manager = new ProductManager();
+    private final ProductManager manager = new ProductManager();
 
     private void loadProductTable() {
 
@@ -229,6 +230,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
 
         jButton5.setForeground(new java.awt.Color(204, 0, 204));
         jButton5.setText("Search");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 0, 255));
@@ -351,7 +353,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_text1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here
+       
     String id = text1.getText();
     String name = text2.getText();
     String category = text3.getText();
@@ -360,7 +362,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     String priceStr = text6.getText();
     String quantityStr = text7.getText();
     
-    ProductStatus status = ProductStatus.valueOf((String) jComboBox1.getSelectedItem());
+    ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
 
 
     if (!Product.isNotEmpty(id)) {
@@ -369,6 +371,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Enter ID");
         return;
     }
+    
     double price = Double.parseDouble(priceStr);
     int quantity = Integer.parseInt(quantityStr);
     
@@ -444,6 +447,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     String qtyStr = text7.getText();
 
     ProductStatus status = ProductStatus.valueOf(jComboBox1.getSelectedItem().toString());
+    
 
     if (!Product.isNotEmpty(id)) {
     } else {
@@ -470,15 +474,31 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     }   
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    String keyword = text8.getText();
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
+    for (Product product : manager.searchProducts(keyword)) {
+        model.addRow(new Object[]{
+            product.getProductId(),
+            product.getProductName(),
+            product.getCategory(),
+            product.getBrand(),
+            product.getDescription(),
+            product.getPrice(),
+            product.getQuantity(),
+            product.getProductStatus()
+        });
+    
+    }//GEN-LAST:event_jButton5ActionPerformed
+}
     /**
-     * @param args the command line arguments
+     *
+     * @param args
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void main(String[]args) {
+       
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -489,9 +509,7 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
+    
         java.awt.EventQueue.invokeLater(() -> new ProductCatalogandInventoryManagement().setVisible(true));
     }
 
@@ -527,5 +545,4 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     private javax.swing.JTextField text7;
     private javax.swing.JTextField text8;
     // End of variables declaration//GEN-END:variables
-
-}
+ }
