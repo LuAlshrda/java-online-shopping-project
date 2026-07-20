@@ -15,8 +15,6 @@ public class ProductCatalogandInventoryManagement extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
     model.setRowCount(0);
-    
-
     for (Product product : manager.getProducts()) {
 
         model.addRow(new Object[]{
