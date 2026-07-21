@@ -32,6 +32,7 @@ public class DeliveryDashboardGUI extends javax.swing.JFrame {
         btnPendingDeliveries = new javax.swing.JButton();
         btnDeliveryAssignment = new javax.swing.JButton();
         btnDeliveryReports = new javax.swing.JButton();
+        btnRegister = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,11 +42,14 @@ public class DeliveryDashboardGUI extends javax.swing.JFrame {
         btnPendingDeliveries.setText("Pending Orders");
         btnPendingDeliveries.addActionListener(this::btnPendingDeliveriesActionPerformed);
 
-        btnDeliveryAssignment.setText("Delivery Assignment & Records");
+        btnDeliveryAssignment.setText("Delivery Management");
         btnDeliveryAssignment.addActionListener(this::btnDeliveryAssignmentActionPerformed);
 
         btnDeliveryReports.setText("Delivery Reports");
         btnDeliveryReports.addActionListener(this::btnDeliveryReportsActionPerformed);
+
+        btnRegister.setText("Register Delivery Person");
+        btnRegister.addActionListener(this::btnRegisterActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,9 +62,11 @@ public class DeliveryDashboardGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnDeliveryReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPendingDeliveries, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDeliveryAssignment, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                    .addComponent(btnRegister, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btnDeliveryReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPendingDeliveries, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeliveryAssignment, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
                 .addGap(121, 121, 121))
         );
         layout.setVerticalGroup(
@@ -68,13 +74,15 @@ public class DeliveryDashboardGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jLabel1)
-                .addGap(42, 42, 42)
-                .addComponent(btnPendingDeliveries)
-                .addGap(29, 29, 29)
-                .addComponent(btnDeliveryAssignment)
                 .addGap(18, 18, 18)
+                .addComponent(btnRegister)
+                .addGap(35, 35, 35)
+                .addComponent(btnPendingDeliveries)
+                .addGap(35, 35, 35)
+                .addComponent(btnDeliveryAssignment)
+                .addGap(41, 41, 41)
                 .addComponent(btnDeliveryReports)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         pack();
@@ -94,6 +102,11 @@ public class DeliveryDashboardGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         new DeliveryReportsGUI().setVisible(true);
     }//GEN-LAST:event_btnDeliveryReportsActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        new DeliveryPersonGUI().setVisible(true);
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -124,6 +137,7 @@ public class DeliveryDashboardGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnDeliveryAssignment;
     private javax.swing.JButton btnDeliveryReports;
     private javax.swing.JButton btnPendingDeliveries;
+    private javax.swing.JButton btnRegister;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
