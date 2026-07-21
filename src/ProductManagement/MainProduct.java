@@ -10,4 +10,6 @@ public class MainProduct {
         ProductCatalogandInventoryManagement_1 frame = new  ProductCatalogandInventoryManagement_1 ();
         frame.setVisible(true);
     }
+    
 }
+
