@@ -165,7 +165,7 @@ showOrders();
         btnCancelOrder = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnCreateOrder.setBackground(new java.awt.Color(153, 0, 153));
         btnCreateOrder.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
