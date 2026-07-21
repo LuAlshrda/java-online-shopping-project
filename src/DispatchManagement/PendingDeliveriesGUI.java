@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
  */
 public class PendingDeliveriesGUI extends javax.swing.JFrame {
     private OrderManager orderManager;
+     private DeliveryManager deliveryManager;
+    private DeliveryFileHandler deliveryFileHandler;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PendingDeliveriesGUI.class.getName());
 
@@ -24,6 +26,9 @@ public class PendingDeliveriesGUI extends javax.swing.JFrame {
     public PendingDeliveriesGUI() {
         initComponents();
         orderManager=new OrderManager();
+        deliveryManager=new DeliveryManager();
+        deliveryFileHandler=new DeliveryFileHandler();
+        deliveryManager.setDeliveryList(deliveryFileHandler.loadDeliveries());
         loadPendingOrders();
     }
 
@@ -156,9 +161,7 @@ public class PendingDeliveriesGUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new DeliveryDashboardGUI().setVisible(true);
-
-    dispose();
+        
     }//GEN-LAST:event_jButton1ActionPerformed
      
     private void loadPendingOrders() {
@@ -171,8 +174,11 @@ public class PendingDeliveriesGUI extends javax.swing.JFrame {
     for (Order order : orderManager.getOrders()) {
         System.out.println(order.getOrderId()+ " "+order.getStatus());
 
-        if (order.getStatus() == OrderStatus.READY_FOR_DISPATCH
-                || order.getStatus() == OrderStatus.PACKED) {
+        if ((order.getStatus() == OrderStatus.READY_FOR_DISPATCH
+
+        || order.getStatus() == OrderStatus.PACKED)
+
+        && deliveryManager.searchByOrderId(order.getOrderId()) == null) {
             System.out.println("Adding order: "+order.getOrderId());
 
             model.addRow(new Object[]{

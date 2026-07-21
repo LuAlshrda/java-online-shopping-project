@@ -18,6 +18,9 @@ public class DeliveryReportsGUI extends javax.swing.JFrame {
     public DeliveryReportsGUI() {
         initComponents();
          deliveryManager=new DeliveryManager();
+          DeliveryFileHandler fileHandler = new DeliveryFileHandler();
+          deliveryManager.setDeliveryList(fileHandler.loadDeliveries());
+
     }
 
     /**
