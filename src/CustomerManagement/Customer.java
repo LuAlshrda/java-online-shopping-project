@@ -12,15 +12,22 @@ package CustomerManagement;
 import java.io.Serializable;
 
 public class Customer implements Serializable {
-    private String customerId, customerName, phone, email, address, city, registrationDate;
+    private String username;
+    private String customerId;
+    private String customerName;
+    private String phone;
+    private String email;
+    private String address;
+    private String city;
+    private String registrationDate;
     private CustomerStatus status;
     
     //default constructor
     public Customer(){}
     
     //parameterized constructor
-    public Customer(String customerId, String customerName, String phone, String email, String address, String city, String registrationDate, CustomerStatus status)
-    {
+    public Customer(String username, String customerId, String customerName, String phone, String email, String address, String city, String registrationDate, CustomerStatus status) {
+        this.username = username;
         this.customerId = customerId;
         this.customerName = customerName;
         this.phone = phone;
@@ -98,6 +105,13 @@ public class Customer implements Serializable {
         this.status = status;
     }
     
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     @Override
     public String toString() {

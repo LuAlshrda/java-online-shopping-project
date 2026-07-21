@@ -147,5 +147,21 @@ public class CustomerManager{
 
         return count;
     }
+    
+    public Customer findCustomerByUsername(String username){
+
+    for(Customer customer : customers){
+
+        if(customer.getUsername().equalsIgnoreCase(username)){
+
+            return customer;
+
+        }
+
+    }
+
+    return null;
+
+    }
 }
 
