@@ -8,11 +8,10 @@ package OrderManagement;
  *
  * @author Sham
  */
-public enum OrderStatus {
-    PLACED,             // تم الطلب
-    CONFIRMED,          // مؤكد
-    PACKED,             // مجهز
-    READY_FOR_DISPATCH, // جاهز للتوصيل
-    CANCELLED           // ملغي
 
+public class Main {
+    public static void main (String[] args){
+        NewJFrame frame = new NewJFrame();
+        frame.setvisible(true);
+    }
 }
