@@ -142,7 +142,7 @@ public class ProductCatalogandInventoryManagement_1 extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 0, 255));
         jLabel8.setText("Price :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OUT OF STOCK", "DISCONTINUED", " " }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OUT_OF_STOCK", "DISCONTINUED", " " }));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -513,7 +513,7 @@ public class ProductCatalogandInventoryManagement_1 extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AVAILABLE", "OUT_OF_STOCK", "DISCONTINUED" }));
+        
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

@@ -51,7 +51,7 @@ public class Product implements Serializable {
     public static boolean isValidQuantity(String qtyStr) {
         try {
             int qty = Integer.parseInt(qtyStr);
-            //  This currently rejects any quantity less than 3
+            //  This currently rejects any quantity less than 0
             if (qty < 0) { 
                 return false;
             }
